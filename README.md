@@ -219,20 +219,6 @@ The project includes built-in testing functionality.
    ctest --output-on-failure
    ```
 
----
-
-## Contributing
-
-Contributions are welcome!
-
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b my-feature
-   ```
-3. Submit a pull request.
-
----
 
 ## License
 
