@@ -63,7 +63,11 @@ void test_generate_hash() {
         std::string resultHash = PurgeDuplicates::generateHash(testFile);
 
         // Precomputed hash of "Hello, Hash!"
-        const std::string expectedHash = "8618da78e471548a10a7000f8e7304237d263acb6b4d0bddd7430df90a2c100deea12edec94417cdd029f615dd3cce251bde964aab79b6802b70b382a7bae029";
+#ifdef PDCPP_FORCE_32BIT_PATH
+    const std::string expectedHash = "7121650d054ac1d16696232509067be3b78296721f1bcbd96e70200ac98ec524";
+#else
+    const std::string expectedHash = "8618da78e471548a10a7000f8e7304237d263acb6b4d0bddd7430df90a2c100deea12edec94417cdd029f615dd3cce251bde964aab79b6802b70b382a7bae029";
+#endif
         std::cout << "Result hash: " << resultHash << std::endl;
         std::cout << "Expected hash: " << expectedHash << std::endl;
         assert(resultHash == expectedHash);

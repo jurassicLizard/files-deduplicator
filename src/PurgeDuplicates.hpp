@@ -43,13 +43,17 @@ public:
     void execute();
 
 /**
- * @brief Generates the SHA-256 hash of a file's contents.
+ * @brief Generates a cryptographic hash of a file's contents using Blake2 algorithm.
  * @param filePath The file to generate the hash for.
- * @return The SHA-256 hash as a hexadecimal string.
+ * @return The hash as a hexadecimal string.
+ * @details Platform-specific behavior:
+ *   - On 64-bit architectures: Uses Blake2b512 for better performance
+ *   - On 32-bit architectures: Uses Blake2s256 for memory efficiency
+ *   - Can be forced to 32-bit algorithm with PDCPP_FORCE_32BIT_PATH define
  * @throws std::runtime_error If the hash generation fails.
  * @throws std::ios_base::failure If the file cannot be opened.
  */
-static std::string generateHash(const std::string& filePath);
+    static std::string generateHash(const std::string& filePath);
 
 /**
  * @brief Displays a progress bar in the console.

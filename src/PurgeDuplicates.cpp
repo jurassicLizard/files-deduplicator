@@ -46,7 +46,25 @@ std::string PurgeDuplicates::generateHash(const std::string& filePath) {
     if (context == nullptr) {
         throw std::runtime_error("Failed to create EVP_MD_CTX.");
     }
+//depending on architecture we load blake2s256 for 32-bit Platforms and blake2b512 for 64-bit platforms
+#if defined(PDCPP_FORCE_32BIT_PATH)
+    // Force 32-bit path for testing
+    #define PDCPP_USE_64BIT_HASH_ALGORITHM 0
+#elif defined(__x86_64__) || defined(_M_X64) || defined(__amd64) || defined(__aarch64__) || defined(_M_ARM64)
+    // Normal 64-bit detection
+    #define PDCPP_USE_64BIT_HASH_ALGORITHM 1
+#else
+    // Real 32-bit systems
+    #define PDCPP_USE_64BIT_HASH_ALGORITHM 0
+#endif
+
+#if PDCPP_USE_64BIT_HASH_ALGORITHM
+    std::cout << "Optimized for 64-Bit Architecture : Using Blake2b512" << std::endl;
     if (EVP_DigestInit_ex(context, EVP_blake2b512(), nullptr) != 1) {
+#else
+    std::cout << "Optimized for 32-Bit Architecture : Using Blake2s256" << std::endl;
+    if (EVP_DigestInit_ex(context, EVP_blake2s256(), nullptr) != 1) {
+#endif
         EVP_MD_CTX_free(context);
         throw std::runtime_error("Failed to initialize digest with Blake2.");
     }

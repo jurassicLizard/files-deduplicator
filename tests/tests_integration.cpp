@@ -24,6 +24,7 @@
  * ---
  *
  */
+
 #include "../src/PurgeDuplicates.hpp"
 #include <filesystem>
 #include <fstream>
@@ -31,6 +32,7 @@
 #include <cassert>
 #include <random>
 #include <chrono>
+
 
 namespace fs = std::filesystem;
 // Helper function to check that one and only one file exists

@@ -20,34 +20,29 @@ set(INTEGRATION_TEST_SOURCES
 )
 
 # ----------------------------------------------------------------------------
-# Add unit test executable
+# Common function to create test targets with different architecture flags
 # ----------------------------------------------------------------------------
-add_executable(tests_unit ${UNIT_TEST_SOURCES} ${TEST_TARGETS_SOURCES})
+function(add_architecture_test_targets test_name sources test_sources)
+    # Native architecture test target
+    add_executable(${test_name} ${test_sources} ${sources})
+    target_include_directories(${test_name} PUBLIC ../src)
+    find_package(OpenSSL REQUIRED)
+    target_link_libraries(${test_name} PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+    add_test(NAME ${test_name} COMMAND ${test_name})
 
-# Include the src folder for headers
-target_include_directories(tests_unit PUBLIC ../src)
-
-# Link OpenSSL and source files for unit testing (if needed)
-find_package(OpenSSL REQUIRED)
-target_link_libraries(tests_unit PRIVATE OpenSSL::SSL OpenSSL::Crypto)
-
-# Register the unit test executable in CTest
-add_test(NAME UnitTests COMMAND tests_unit)
+    # 32-bit simulated test target
+    add_executable(${test_name}_32bit ${test_sources} ${sources})
+    target_include_directories(${test_name}_32bit PUBLIC ../src)
+    target_compile_definitions(${test_name}_32bit PRIVATE PDCPP_FORCE_32BIT_PATH)
+    target_link_libraries(${test_name}_32bit PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+    add_test(NAME ${test_name}_32bit COMMAND ${test_name}_32bit)
+endfunction()
 
 # ----------------------------------------------------------------------------
-# Add integration test executable
+# Create test targets for both 64-bit and 32-bit paths
 # ----------------------------------------------------------------------------
-add_executable(tests_integration ${INTEGRATION_TEST_SOURCES} ${TEST_TARGETS_SOURCES})
-
-# Include the src folder for headers
-target_include_directories(tests_integration PUBLIC ../src)
-
-# Link OpenSSL and source files for integration testing (if needed)
-find_package(OpenSSL REQUIRED)
-target_link_libraries(tests_integration PRIVATE OpenSSL::SSL OpenSSL::Crypto)
-
-# Register the integration test executable in CTest
-add_test(NAME IntegrationTests COMMAND tests_integration)
+add_architecture_test_targets(tests_unit "${TEST_TARGETS_SOURCES}" "${UNIT_TEST_SOURCES}")
+add_architecture_test_targets(tests_integration "${TEST_TARGETS_SOURCES}" "${INTEGRATION_TEST_SOURCES}")
 
 # ----------------------------------------------------------------------------
 # Debugging Information
@@ -56,4 +51,5 @@ message(STATUS "=====================================================")
 message(STATUS "Configuring tests...")
 message(STATUS "  Unit Test Sources        : ${UNIT_TEST_SOURCES}")
 message(STATUS "  Integration Test Sources : ${INTEGRATION_TEST_SOURCES}")
+message(STATUS "  Testing both native and simulated 32-bit paths")
 message(STATUS "=====================================================")
