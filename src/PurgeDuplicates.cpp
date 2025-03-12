@@ -90,7 +90,7 @@ std::string PurgeDuplicates::generateHash(const std::string& filePath) {
 
 void PurgeDuplicates::displayProgress(size_t current, size_t total) {
     static const int barWidth = 50;
-    float progress = static_cast<float>(current) / total;
+    float progress = static_cast<float>(current) / static_cast<float>(total);
     int pos = static_cast<int>(barWidth * progress);
 
     std::cout << "\r[";
