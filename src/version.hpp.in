@@ -1,0 +1,11 @@
+#ifndef PURGE_DUPLICATES_VERSION_HPP
+#define PURGE_DUPLICATES_VERSION_HPP
+
+namespace pdcpp {
+    constexpr const char* VERSION = "@PROJECT_VERSION@";
+    constexpr const char* VERSION_MAJOR = "@PROJECT_VERSION_MAJOR@";
+    constexpr const char* VERSION_MINOR = "@PROJECT_VERSION_MINOR@";
+    constexpr const char* VERSION_PATCH = "@PROJECT_VERSION_PATCH@";
+}
+
+#endif // PURGE_DUPLICATES_VERSION_HPP

@@ -5,7 +5,7 @@
 # For details, see the LICENSE.md file in the root of this repository.
 
 cmake_minimum_required(VERSION 3.15)
-project(purge-duplicates VERSION 0.3.0)
+project(purge-duplicates VERSION 0.3.2)
 
 # ----------------------------------------------------------------------------
 # C++ Standard
@@ -38,6 +38,17 @@ endif()
 # Set Binary Output Directory
 # ----------------------------------------------------------------------------
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# ----------------------------------------------------------------------------
+# Version Configuration
+# ----------------------------------------------------------------------------
+configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/version.hpp.in
+        ${CMAKE_CURRENT_BINARY_DIR}/generated/version.hpp
+)
+
+# Add the generated directory to the include path
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/generated)
 
 # ----------------------------------------------------------------------------
 # Add the src/ directory
