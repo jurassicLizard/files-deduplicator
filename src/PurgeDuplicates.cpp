@@ -52,7 +52,7 @@ namespace fs = std::filesystem;
 
 PurgeDuplicates::PurgeDuplicates(std::string  directory, bool showProgress, bool liveRun)
         : directoryPath(std::move(directory)), showProgress(showProgress), liveRun(liveRun) {
-#ifdef PDCPP_US_64BIT_HASH_ALGORITHM
+#if PDCPP_USE_64BIT_HASH_ALGORITHM
     std::cout << "Optimized for 64-Bit Architecture : Using Blake5b512" << std::endl;
 #else
     std::cout << "Optimized for 32-Bit Architecture : Using Blake2s256" << std::endl;
