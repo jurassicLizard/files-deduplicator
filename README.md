@@ -8,6 +8,8 @@
 
 - **Recursive File Scanning**: Analyzes all files within a folder, including its subdirectories.
 - **Cryptographic Precision**: Utilizes Blake2 to guarantee accurate and fast duplicate detection.
+   - Uses Blake2b512 on 64-bit platforms
+   - Uses Blake2s256 on 32-bit platforms which is much faster on that platform
 - **Progress Display**: Optionally display progress during execution using a progress bar.
 - **Cross-Platform**: Designed to work on **Linux**, **Windows**, and **macOS**.
 - **Efficient and Lightweight**: Capable of processing large datasets effectively.
@@ -207,19 +209,29 @@ sudo rm -rf /usr/local/include/purge-duplicates/
 
 ## Testing
 
-The project includes built-in testing functionality.
+The project includes comprehensive testing to ensure reliability across different platforms:
 
-1. Enable testing:
+- **Unit Tests**: Cover core functionality including file hashing, duplicate detection, and file operations.
+- **Integration Tests**: Verify the end-to-end workflow with real file operations (creating and deleting) in a controlled test directory.
+- **Platform-Specific Testing**: Both 64-bit and 32-bit hash implementation paths are tested.
+   - For development purposes, the 32-bit algorithm path can be forced on 64-bit systems by defining `PDCPP_FORCE_32BIT_PATH` during compilation.
+   - This ensures both code paths are fully tested even when developing on 64-bit systems only.
+
+To run tests:
+
+1. Go to build directory:
+   ```bash
+   cmake .. -DPDCPP_ENABLE_TESTING=ON
+   ```
+2. Enable testing:
    ```bash
    cmake .. -DPDCPP_ENABLE_TESTING=ON
    ```
 
-2. Run tests:
+3.Run tests:
    ```bash
    ctest --output-on-failure
    ```
-
-
 ## License
 
 This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for more details.

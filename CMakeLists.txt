@@ -5,7 +5,7 @@
 # For details, see the LICENSE.md file in the root of this repository.
 
 cmake_minimum_required(VERSION 3.15)
-project(purge-duplicates VERSION 0.1.0)
+project(purge-duplicates VERSION 0.3.0)
 
 # ----------------------------------------------------------------------------
 # C++ Standard
