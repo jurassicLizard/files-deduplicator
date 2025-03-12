@@ -28,8 +28,7 @@
     - [Windows](#windows)
     - [Installing and Uninstalling the Software](#installing-and-uninstalling-the-software)
 4. [Testing](#testing)
-5. [Contributing](#contributing)
-6. [License](#license)
+5. [License](#license)
 
 ---
 
