@@ -1,13 +1,13 @@
 # Purge-Duplicates
 
-**purge-duplicates** is a command-line tool that identifies and removes duplicate files recursively from a specified folder. It uses cryptographic **SHA-256** hashes for reliable file comparisons to ensure precise duplicate detection. Whether managing large datasets or cleaning up redundant files, this tool provides an efficient and lightweight solution.
+**purge-duplicates** is a command-line tool that identifies and removes duplicate files recursively from a specified folder. It uses cryptographic **Blake2** hashes for reliable file comparisons to ensure precise duplicate detection. Whether managing large datasets or cleaning up redundant files, this tool provides an efficient and lightweight solution.
 
 ---
 
 ## Features
 
 - **Recursive File Scanning**: Analyzes all files within a folder, including its subdirectories.
-- **Cryptographic Precision**: Utilizes SHA-256 to guarantee accurate duplicate detection.
+- **Cryptographic Precision**: Utilizes Blake2 to guarantee accurate and fast duplicate detection.
 - **Progress Display**: Optionally display progress during execution using a progress bar.
 - **Cross-Platform**: Designed to work on **Linux**, **Windows**, and **macOS**.
 - **Efficient and Lightweight**: Capable of processing large datasets effectively.

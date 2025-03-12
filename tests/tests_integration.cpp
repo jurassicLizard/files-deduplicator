@@ -33,7 +33,19 @@
 #include <chrono>
 
 namespace fs = std::filesystem;
+// Helper function to check that one and only one file exists
+template<typename... Args>
+int count_existing_files(Args const&... files) {
+    static_assert((std::is_convertible_v<Args, std::string> && ...),
+                  "All arguments must be convertible to std::string");
+    std::initializer_list<std::string> fileList = {files...};
+    int count = 0;
+    for(std::string const& fileName : fileList) {
+        if(fs::exists(fileName)) ++count;
+    }
+    return count;
 
+}
 // Helper function to write binary data to a file
 void write_binary_file(const std::string& path, const std::vector<char>& content) {
     std::ofstream file(path, std::ios::binary);
@@ -142,21 +154,31 @@ void test_binary_and_ascii_edge_cases() {
     if (fs::exists(testDir)) fs::remove_all(testDir);
 
     fs::create_directory(testDir);
+    // Setup file names
+    const std::string binaryLongFileName("/"+std::string(200, 'a')+".bin");
+    const std::string binarySpaceFileName("/binary_space .bin");
+    const std::string binaryUnicodeFileName("/binary_unicode_✓.bin");
+    const std::string asciiLongFileName("/ascii_long_" + std::string(200, 'b') + ".txt");
+    const std::string asciiUnicodeFileName("/ascii_unicode_✓.txt");
 
     // Create ASCII and binary files with unusual names
-    write_binary_file(testDir + "/binary_long_" + std::string(200, 'a') + ".bin", {0x01, 0x02, 0x03, 0x04});
-    write_binary_file(testDir + "/binary_space .bin", {0x01, 0x02, 0x03, 0x04});
-    write_binary_file(testDir + "/binary_unicode_✓.bin", {0x01, 0x02, 0x03, 0x04});
-    std::ofstream(testDir + "/ascii_long_" + std::string(200, 'b') + ".txt") << "ASCII content";
-    std::ofstream(testDir + "/ascii_unicode_✓.txt") << "Unicode ASCII content";
+    write_binary_file(testDir + binaryLongFileName, {0x01, 0x02, 0x03, 0x04});
+    write_binary_file(testDir + binarySpaceFileName, {0x01, 0x02, 0x03, 0x04});
+    write_binary_file(testDir + binaryUnicodeFileName, {0x01, 0x02, 0x03, 0x04});
+    std::ofstream(testDir + asciiLongFileName) << "ASCII content";
+    std::ofstream(testDir + asciiUnicodeFileName) << "Unicode ASCII content";
 
     // Run PurgeDuplicates
     PurgeDuplicates pd(testDir, false,true);
     pd.execute();
 
     // Verify results
-    bool binaryFileExists = fs::exists(testDir + "/binary_long_" + std::string(200, 'a') + ".bin");
-    bool asciiFileExists = fs::exists(testDir + "/ascii_long_" + std::string(200, 'b') + ".txt");
+    bool binaryFileExists = (1 == count_existing_files(testDir+binaryLongFileName,
+                                                       testDir+binarySpaceFileName,
+                                                       testDir+binaryUnicodeFileName));
+
+    bool asciiFileExists  = (2 == count_existing_files(testDir+asciiLongFileName,
+                                                       testDir+asciiUnicodeFileName)); // both files must exist
 
     assert(binaryFileExists == true); // Unique files should remain
     assert(asciiFileExists == true);

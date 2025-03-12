@@ -48,11 +48,11 @@ void test_main_argument_parsing() {
     std::cout << "Test Passed: Command-line argument parsing works correctly." << std::endl;
 }
 
-void test_generate_sha256() {
+void test_generate_hash() {
     // Generate a hash for a mock file
     try {
         const std::string testFile = "test_file.txt";
-        const std::string fileContents = "Hello, SHA256!";
+        const std::string fileContents = "Hello, Hash!";
 
         // Create a test file
         std::ofstream file(testFile);
@@ -60,10 +60,10 @@ void test_generate_sha256() {
         file.close();
 
         PurgeDuplicates pd(".", false); // Use dummy progress setting
-        std::string resultHash = pd.generateSHA256(testFile);
+        std::string resultHash = PurgeDuplicates::generateHash(testFile);
 
-        // Precomputed hash of "Hello, SHA256!" (using online SHA-256 calculator)
-        const std::string expectedHash = "d14c0cd6caa3d2006a34ba29886d8b2e698e9d2259be8b1f852375d6026502bd";
+        // Precomputed hash of "Hello, Hash!"
+        const std::string expectedHash = "8618da78e471548a10a7000f8e7304237d263acb6b4d0bddd7430df90a2c100deea12edec94417cdd029f615dd3cce251bde964aab79b6802b70b382a7bae029";
         std::cout << "Result hash: " << resultHash << std::endl;
         std::cout << "Expected hash: " << expectedHash << std::endl;
         assert(resultHash == expectedHash);
@@ -313,7 +313,7 @@ void test_live_and_dry_run() {
 int main() {
     // Run all unit tests
     test_main_argument_parsing();
-    test_generate_sha256();
+    test_generate_hash();
     test_progress_display();
     test_identify_and_remove_duplicates();
     test_identify_and_remove_binary_duplicates();

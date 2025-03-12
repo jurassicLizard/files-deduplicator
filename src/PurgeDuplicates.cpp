@@ -29,6 +29,7 @@
 #include <fstream>
 #include <iomanip>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include <openssl/evp.h>
 #include <filesystem>
@@ -37,18 +38,17 @@
 
 namespace fs = std::filesystem;
 
-PurgeDuplicates::PurgeDuplicates(const std::string& directory, bool showProgress, bool liveRun)
-        : directoryPath(directory), showProgress(showProgress), liveRun(liveRun) {}
+PurgeDuplicates::PurgeDuplicates(std::string  directory, bool showProgress, bool liveRun)
+        : directoryPath(std::move(directory)), showProgress(showProgress), liveRun(liveRun) {}
 
-std::string PurgeDuplicates::generateSHA256(const std::string& filePath) {
+std::string PurgeDuplicates::generateHash(const std::string& filePath) {
     EVP_MD_CTX* context = EVP_MD_CTX_new();
     if (context == nullptr) {
         throw std::runtime_error("Failed to create EVP_MD_CTX.");
     }
-
-    if (EVP_DigestInit_ex(context, EVP_sha256(), nullptr) != 1) {
+    if (EVP_DigestInit_ex(context, EVP_blake2b512(), nullptr) != 1) {
         EVP_MD_CTX_free(context);
-        throw std::runtime_error("Failed to initialize digest with SHA-256.");
+        throw std::runtime_error("Failed to initialize digest with Blake2.");
     }
 
     std::ifstream file(filePath, std::ios::binary);
@@ -61,14 +61,14 @@ std::string PurgeDuplicates::generateSHA256(const std::string& filePath) {
     while (file.read(buffer, sizeof(buffer))) {
         if (EVP_DigestUpdate(context, buffer, file.gcount()) != 1) {
             EVP_MD_CTX_free(context);
-            throw std::runtime_error("Failed to update SHA-256 hash during file processing.");
+            throw std::runtime_error("Failed to update Blake2 hash during file processing.");
         }
     }
 
     if (file.gcount() > 0) {
         if (EVP_DigestUpdate(context, buffer, file.gcount()) != 1) {
             EVP_MD_CTX_free(context);
-            throw std::runtime_error("Failed to update SHA-256 hash with final bytes.");
+            throw std::runtime_error("Failed to update Blake2 hash with final bytes.");
         }
     }
 
@@ -76,7 +76,7 @@ std::string PurgeDuplicates::generateSHA256(const std::string& filePath) {
     unsigned int hashLength = 0;
     if (EVP_DigestFinal_ex(context, hash, &hashLength) != 1) {
         EVP_MD_CTX_free(context);
-        throw std::runtime_error("Failed to finalize SHA-256 hash.");
+        throw std::runtime_error("Failed to finalize Blake2 hash.");
     }
 
     EVP_MD_CTX_free(context);
@@ -128,7 +128,7 @@ void PurgeDuplicates::identifyAndRemoveDuplicates() {
         if (entry.is_regular_file()) {
             const std::string filePath = entry.path().string();
             try {
-                std::string fileHash = generateSHA256(filePath);
+                std::string fileHash = generateHash(filePath);
 
                 if (fileHashes.count(fileHash)) {
                     duplicates.push_back(filePath);

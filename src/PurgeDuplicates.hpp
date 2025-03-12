@@ -36,7 +36,7 @@ public:
      * @param showProgress Whether to display a progress bar or not.
      * @param liveRun Must be passed and set as true to force a real run
      */
-    PurgeDuplicates(const std::string& directory, bool showProgress, bool liveRun = false);
+    PurgeDuplicates(std::string  directory, bool showProgress, bool liveRun = false);
     /**
      * @brief Executes the logic for identifying and removing duplicates.
      */
@@ -49,7 +49,7 @@ public:
  * @throws std::runtime_error If the hash generation fails.
  * @throws std::ios_base::failure If the file cannot be opened.
  */
-std::string generateSHA256(const std::string& filePath);
+static std::string generateHash(const std::string& filePath);
 
 /**
  * @brief Displays a progress bar in the console.
