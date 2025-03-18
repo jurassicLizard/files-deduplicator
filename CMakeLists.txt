@@ -4,7 +4,7 @@
 # This project is licensed under the MIT License.
 # For details, see the LICENSE.md file in the root of this repository.
 
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.21)
 project(files-deduplicator VERSION 0.4.0)
 
 # ----------------------------------------------------------------------------

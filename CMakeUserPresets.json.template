@@ -1,0 +1,66 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "non-linux-debug",
+      "displayName": "Debug (with vcpkg)",
+      "inherits": [
+        "windows-debug",
+        "macos-debug"
+      ],
+      "cacheVariables": {
+        "vcpkgRoot": {
+          "type": "PATH",
+          "value": "$env{VCPKG_ROOT}"
+        }
+      },
+      "condition": {
+        "type": "inList",
+        "string": "${hostSystemName}",
+        "list": [
+          "Windows",
+          "Darwin"
+        ]
+      }
+    },
+    {
+      "name": "non-linux-release",
+      "displayName": "Release (with vcpkg)",
+      "inherits": [
+        "windows-release",
+        "macos-release"
+      ],
+      "cacheVariables": {
+        "vcpkgRoot": {
+          "type": "PATH",
+          "value": "$env{VCPKG_ROOT}"
+        }
+      },
+      "condition": {
+        "type": "inList",
+        "string": "${hostSystemName}",
+        "list": [
+          "Windows",
+          "Darwin"
+        ]
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "non-linux-debug",
+      "configurePreset": "non-linux-debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "non-linux-release",
+      "configurePreset": "non-linux-release",
+      "configuration": "Release"
+    }
+  ]
+}

@@ -27,16 +27,21 @@
 ## 📋 Table of Contents
 
 1. [Introduction](#introduction)
-2. [Getting Started](#getting-started)
-3. [Usage](#usage)
+2. [Getting Started](#-getting-started)
+3. [Usage](#-usage)
     - [Command-Line Arguments](#command-line-arguments)
-4. [Building from Source](#building-from-source)
+4. [Prerequisites](#prerequisites)
+    - [Linux](#prerequisites-linux)
+    - [Windows](#prerequisites-windows)
+    - [macOS](#prerequisites-macos)
+5. [Building from Source](#building-from-source)
     - [Linux](#linux)
     - [Windows](#windows)
+    - [macOS](#macos)
     - [Installing and Uninstalling the Software](#installing-and-uninstalling-the-software)
-5. [Testing](#testing)
+6. [Testing](#testing)
     - [Address Sanitization](#address-sanitization)
-6. [License](#license)
+7. [License](#license)
 
 ---
 
@@ -46,7 +51,7 @@ Files-Deduplicator is designed to help users clean up their file systems by remo
 
 ## 🚀 Getting Started
 
-Download the latest [release](https://github.com/jurassiclizard/files-deduplicator/releases) or build the software from source to get started. Refer to the [Usage](#usage) section for detailed instructions on how to use the tool.
+Download the latest [release](https://github.com/jurassiclizard/files-deduplicator/releases) or build the software from source to get started. Refer to the [Usage](#-usage) section for detailed instructions on how to use the tool.
 
 ---
 
@@ -81,110 +86,240 @@ Output:
 ```plaintext
 Dry Run: The following files would be deleted:
   /home/user/documents/file1.txt
-  /home/user/documents/subdir/file2.txt
-Dry run complete. No files were deleted.
-To perform the actual deletion, re-run the command with the --live-run flag.
 ```
 
----
+## Prerequisites
 
-### Example 2: Live-Run (Deletes Duplicates)
+### Prerequisites: Linux
 
-**Scenario**: Remove duplicate files in `/home/user/documents` and show progress.
+- **CMake** (version 3.21 or higher)
+- **C++ Compiler** with C++20 support (GCC 10+ or Clang 10+)
+- **Git** (for obtaining the source code)
+- **vcpkg** (optional, for dependency management)
 
+To install prerequisites on Ubuntu/Debian:
 ```bash
-rmdup /home/user/documents --show-progress --live-run
+sudo apt update
+sudo apt install cmake build-essential git
 ```
 
-Output:
-```plaintext
-[=========================>                ] 50% 
-Removed duplicate: /home/user/documents/file1.txt
-Removed duplicate: /home/user/documents/subdir/file2.txt
-Duplicate removal complete. Processed 500 unique files.
-```
+### Prerequisites: Windows
 
-> **NOTE**: Use the `--live-run` flag cautiously, as it will permanently delete files identified as duplicates. Always run the tool in **dry-run mode** first to verify the files to be deleted.
+- **CMake** (version 3.21 or higher)
+- **Visual Studio 2019** or newer with C++ desktop development workload
+- **Git** (for obtaining the source code)
+- **vcpkg** (for dependency management)
 
----
+You can install these tools through:
+- [Visual Studio](https://visualstudio.microsoft.com/downloads/)
+- [CMake](https://cmake.org/download/)
+- [Git](https://git-scm.com/download/win)
+- [vcpkg](https://github.com/microsoft/vcpkg)
 
-## 🔧 Building from Source
+#### Setting up vcpkg
+
+1. Clone and bootstrap vcpkg:
+    ```bash
+    git clone https://github.com/microsoft/vcpkg
+    cd vcpkg
+    .\bootstrap-vcpkg.bat
+    ```
+
+2. Set the VCPKG_ROOT environment variable:
+    ```bash
+    # In PowerShell
+    $env:VCPKG_ROOT = "path\to\vcpkg"
+    
+    # Or permanently (Windows)
+    [Environment]::SetEnvironmentVariable("VCPKG_ROOT", "path\to\vcpkg", "User")
+    ```
+
+Note: The project includes a vcpkg.json manifest file that will automatically download and build the OpenSSL dependency when you configure the project with CMake.
+
+### Prerequisites: macOS
+
+- **CMake** (version 3.21 or higher)
+- **Xcode** or **Command Line Tools**
+- **Git** (for obtaining the source code)
+- **vcpkg** (for dependency management)
+
+To install prerequisites using Homebrew:
+    ```bash
+    brew install cmake git
+    xcode-select --install
+    ```
+
+#### Setting up vcpkg
+
+1. Clone and bootstrap vcpkg:
+    ```bash
+    git clone https://github.com/microsoft/vcpkg
+    cd vcpkg
+    ./bootstrap-vcpkg.sh
+    ```
+2. Set the VCPKG_ROOT environment variable:
+    ```bash
+    # For current session
+    export VCPKG_ROOT=path/to/vcpkg
+    
+    # Add to ~/.zshrc or ~/.bash_profile for persistence
+    echo 'export VCPKG_ROOT=path/to/vcpkg' >> ~/.zshrc
+    source ~/.zshrc
+    ```
+
+Note: The project includes a vcpkg.json manifest file that will automatically download and build the OpenSSL dependency when you configure the project with CMake.
+
+## Building from Source
+
+The project uses CMake presets to simplify the build configuration. You'll find predefined configurations in `CMakePresets.json`, which you can extend with your own settings.
+
+### CMakeUserPresets.json Setup
+
+The repository includes a template file `CMakeUserPresets.json.template` that you can use to create your own custom build configurations.
+
+1. Copy the template file to create your user presets:
+    ```bash
+    cp CMakeUserPresets.json.template CMakeUserPresets.json
+    ```
+
+2. Edit `CMakeUserPresets.json` to customize build settings, paths, or add your own presets.
+
+3. This file is git-ignored, so your custom settings won't be committed to the repository.
+
+Note: The template includes settings for vcpkg integration. If you're using vcpkg for dependency management, ensure the `VCPKG_ROOT` environment variable is set or update the `CMAKE_TOOLCHAIN_FILE` path in your user presets.
+
 
 ### Linux
 
-To build the software on Linux:
+Using CMake presets:
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/jurassiclizard/files-deduplicator.git
-   cd files-deduplicator
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/jurassiclizard/files-deduplicator.git
+cd files-deduplicator
 
-2. Build using CMake:
-   ```bash
-   mkdir build && cd build
-   cmake ..
-   make
-   ```
+# Configure using preset
+cmake --preset linux-debug
+
+# Build
+cmake --build --preset linux-debug
+
+# Run tests
+ctest --preset linux-debug
+```
+
+For release build:
+```bash
+cmake --preset linux-release
+cmake --build --preset linux-release
+```
 
 ### Windows
 
-To build the software on Windows:
+Using CMake presets:
 
-1. Clone the repository
-2. Open the project in Visual Studio or use CMake:
-   ```bash
-   mkdir build && cd build
-   cmake ..
-   cmake --build .
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/jurassiclizard/files-deduplicator.git
+cd files-deduplicator
+
+# Configure using preset
+cmake --preset non-linux-debug
+
+# Build
+cmake --build --preset non-linux-debug
+
+# Run tests
+ctest --preset non-linux-debug
+```
+
+For release build:
+```bash
+cmake --preset non-linux-release
+cmake --build --preset non-linux-release
+```
+
+### macOS
+
+Using CMake presets:
+
+```bash
+# Clone the repository
+git clone https://github.com/jurassiclizard/files-deduplicator.git
+cd files-deduplicator
+
+# Configure using preset
+cmake --preset non-linux-debug
+
+# Build
+cmake --build --preset non-linux-debug
+
+# Run tests
+ctest --preset non-linux-debug
+```
+
+For release build:
+```bash
+cmake --preset non-linux-release
+cmake --build --preset non-linux-release
+```
 
 ### Installing and Uninstalling the Software
 
-After building, you can install the software system-wide on Linux:
+#### Install
+
+After building, you can install the software system-wide:
 
 ```bash
-sudo make install
+# For Linux/macOS
+sudo cmake --install build
+
+# For Windows (run as Administrator)
+cmake --install build
 ```
+
+#### Uninstall
 
 To uninstall:
 
 ```bash
-sudo make uninstall
+# For Linux/macOS
+sudo xargs rm < build/install_manifest.txt
+
+# For Windows
+type build\install_manifest.txt | xargs -r rm
 ```
 
 ## Testing
 
-To ensure reliability, the software includes comprehensive tests. Tests must be enabled explicitly using the CMake option:
+The project includes a comprehensive test suite to ensure correctness and reliability. You can run the tests using CMake presets.
+
+### Running Tests with Presets
+
+Tests can be easily executed using the predefined CMake test presets (We have no threading thus tests are by default generated only in the debug preset):
 
 ```bash
-cmake .. -DPDCPP_ENABLE_TESTING=ON
+# Run tests using Linux debug preset
+ctest --preset linux-debug
+
+# Run tests using non-Linux debug preset (Windows/macOS)
+ctest --preset non-linux-debug
 ```
 
-To run the test suite:
-
-```bash
-cd build
-make
-ctest
-```
+You can also define your own test configurations in the `CMakeUserPresets.json` file for custom test environments.
 
 ### Address Sanitization
 
-For GCC or Clang users, Address Sanitization (ASan) can be enabled to detect memory errors during testing:
+Address Sanitization is enabled in debug builds with the ASAN option (GCC and CLANG only):
 
 ```bash
-cmake .. -DPDCPP_ENABLE_TESTING_WITH_ASAN=ON
-make
-ctest
+# Already enabled in debug presets
+cmake --preset linux-debug
+cmake --build --preset linux-debug
 ```
 
-This option automatically enables testing and configures AddressSanitizer for memory error detection.
+This helps detect memory-related issues like leaks, use-after-free, and out-of-bounds access during testing.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-⭐️ If you find this tool useful, please consider starring the repository on GitHub!
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
