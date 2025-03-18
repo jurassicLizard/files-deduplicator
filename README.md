@@ -1,6 +1,6 @@
 # Purge-Duplicates
 
-**purge-duplicates** is a command-line tool that identifies and removes duplicate files recursively from a specified folder. It uses cryptographic **Blake2** hashes for reliable file comparisons to ensure precise duplicate detection. Whether managing large datasets or cleaning up redundant files, this tool provides an efficient and lightweight solution.
+**Purge-Duplicates** is a powerful command-line tool that efficiently identifies and removes duplicate files from directories. Using cryptographic **Blake2** hashes, it ensures accurate and fast file comparison, making it an essential tool for data cleaning and file management.
 
 ---
 
@@ -8,29 +8,34 @@
 
 - **Recursive File Scanning**: Analyzes all files within a folder, including its subdirectories.
 - **Cryptographic Precision**: Utilizes Blake2 to guarantee accurate and fast duplicate detection.
-   - Uses Blake2b512 on 64-bit platforms
-   - Uses Blake2s256 on 32-bit platforms which is much faster on that platform
+    - Uses Blake2b512 on 64-bit platforms
+    - Uses Blake2s256 on 32-bit platforms for faster performance
 - **Progress Display**: Optionally display progress during execution using a progress bar.
 - **Cross-Platform**: Designed to work on **Linux**, **Windows**, and **macOS**.
 - **Efficient and Lightweight**: Capable of processing large datasets effectively.
 
-> **DISCLAIMER**: This software is provided **"as is"** under the MIT License. Use the software **at your own risk**. The authors are not liable for any damage, loss, or issues that may arise as a result of using this software. Always ensure you have a backup of your data before running the tool.
+> **DISCLAIMER**: This software is provided **"as is"** under the MIT License. Use the software **at your own risk**. The authors are not liable for any damage, loss, or issues that may arise as a result of using this tool.
 
 ---
 
 ## Table of Contents
 
-1. [Getting Started](#getting-started)
-2. [Usage](#usage)
+1. [Introduction](#introduction)
+2. [Getting Started](#getting-started)
+3. [Usage](#usage)
     - [Command-Line Arguments](#command-line-arguments)
-3. [Building from Source](#building-from-source)
+4. [Building from Source](#building-from-source)
     - [Linux](#linux)
     - [Windows](#windows)
     - [Installing and Uninstalling the Software](#installing-and-uninstalling-the-software)
-4. [Testing](#testing)
-5. [License](#license)
+5. [Testing](#testing)
+6. [License](#license)
 
 ---
+
+## Introduction
+
+Purge-Duplicates is designed to help users clean up their file systems by removing duplicate files. Whether you are managing a large dataset or simply tidying up your personal files, this tool provides a reliable and efficient solution.
 
 ## Getting Started
 
@@ -168,7 +173,7 @@ The project is compatible with **Windows**, but preparation is required due to e
 
 3. Clone and build the project:
    ```powershell
-   git clone https://github.com/yourusername/purge-duplicates.git
+   git clone https://github.com/jurassicLizard/purge-duplicates.git
    cd purge-duplicates
    mkdir build
    cd build
@@ -184,7 +189,7 @@ The project is compatible with **Windows**, but preparation is required due to e
 
 #### Installing the Software
 
-The project includes an **install target** to simplify deployment. The `cmake --install` command ensures that the binary and associated files are installed in system-appropriate directories (e.g., `/usr/local/bin` on Linux).
+The project includes an **install target** to simplify deployment. The `cmake --install` command ensures that the binary and associated files are installed in system-appropriate directories (e.g., `/usr/local/bin` for Linux).
 
 1. Install the binary:
    ```bash
@@ -213,24 +218,28 @@ The project includes comprehensive testing to ensure reliability across differen
 - **Unit Tests**: Cover core functionality including file hashing, duplicate detection, and file operations.
 - **Integration Tests**: Verify the end-to-end workflow with real file operations (creating and deleting) in a controlled test directory.
 - **Platform-Specific Testing**: Both 64-bit and 32-bit hash implementation paths are tested.
-   - For development purposes, the 32-bit algorithm path can be forced on 64-bit systems by defining `PDCPP_FORCE_32BIT_PATH` during compilation.
-   - This ensures both code paths are fully tested even when developing on 64-bit systems only.
+    - For development purposes, the 32-bit algorithm path can be forced on 64-bit systems by defining `PDCPP_FORCE_32BIT_PATH` during compilation.
+    - This ensures both code paths are fully tested even when developing on 64-bit systems only.
 
 To run tests:
 
-1. Go to build directory:
+1. Run CMake with Testing enabled during build
    ```bash
    cmake .. -DPDCPP_ENABLE_TESTING=ON
    ```
-2. Enable testing:
+   Or with GCC/CLANG you can activate address sanitization for memory specific error detection
    ```bash
-   cmake .. -DPDCPP_ENABLE_TESTING=ON
+   cmake .. -DPDCPP_ENABLE_TESTING_WITH_ASAN=ON
    ```
-
+2. build
+   ```bash
+   make
+   ```
 3.Run tests:
    ```bash
    ctest --output-on-failure
    ```
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for more details.
