@@ -16,7 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # ----------------------------------------------------------------------------
 # Find OpenSSL with minimum version requirement
 # ----------------------------------------------------------------------------
-find_package(OpenSSL 1.0.0 REQUIRED)
+find_package(OpenSSL 1.1.1 REQUIRED)
 
 # Debugging: Output OpenSSL version and library path
 message(STATUS "Detected OpenSSL version: ${OPENSSL_VERSION}")
