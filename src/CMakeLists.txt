@@ -21,19 +21,19 @@ set(HEADERS
 # ----------------------------------------------------------------------------
 # Add the main executable
 # ----------------------------------------------------------------------------
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
 # Link OpenSSL to the main executable
-target_link_libraries(${PROJECT_NAME} PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 
 # Include current directory for headers
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${EXECUTABLE_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # ----------------------------------------------------------------------------
 # Debugging Information
 # ----------------------------------------------------------------------------
 message(STATUS "=====================================================")
-message(STATUS "Building purge-duplicates executable...")
+message(STATUS "Building ${EXECUTABLE_NAME} executable...")
 message(STATUS "  Source Files       : ${SOURCES}")
 message(STATUS "  Header Files       : ${HEADERS}")
 message(STATUS "=====================================================")

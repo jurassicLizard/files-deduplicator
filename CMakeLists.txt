@@ -5,8 +5,12 @@
 # For details, see the LICENSE.md file in the root of this repository.
 
 cmake_minimum_required(VERSION 3.15)
-project(purge-duplicates VERSION 0.3.3)
+project(files-deduplicator VERSION 0.4.0)
 
+# ----------------------------------------------------------------------------
+# Executable name
+# ----------------------------------------------------------------------------
+set(EXECUTABLE_NAME rmdup)
 # ----------------------------------------------------------------------------
 # C++ Standard
 # ----------------------------------------------------------------------------
@@ -67,8 +71,9 @@ endif()
 # ----------------------------------------------------------------------------
 # Testing Options
 # ----------------------------------------------------------------------------
-option(PDCPP_ENABLE_TESTING "Enable testing for the purge-duplicates project" OFF)
-option(PDCPP_ENABLE_TESTING_WITH_ASAN "Enable AddressSanitizer (ASan) testing for the project" OFF)
+option(PDCPP_ENABLE_TESTING "Enable testing for the ${PROJECT_NAME} project" OFF)
+option(PDCPP_ENABLE_TESTING_WITH_ASAN "Enable extended testing with enabled AddressSanitizer (ASan)" OFF)
+option(ENABLE_ASAN "Enable AddressSanitizer (ASan) for testing" OFF)
 
 if (PDCPP_ENABLE_TESTING_WITH_ASAN)
     set(PDCPP_ENABLE_TESTING ON CACHE BOOL "Enable testing for the project" FORCE)
@@ -84,7 +89,7 @@ endif()
 # Install Targets
 # ----------------------------------------------------------------------------
 # Install the binary (executable)
-install(TARGETS purge-duplicates
+install(TARGETS ${EXECUTABLE_NAME}
         RUNTIME DESTINATION bin                         # Destination for executables
         LIBRARY DESTINATION lib                         # Destination for shared libraries
         ARCHIVE DESTINATION lib                         # Destination for static libraries
@@ -93,7 +98,7 @@ install(TARGETS purge-duplicates
 # If there are public headers, install them too
 # (e.g., if you distribute a reusable library or API)
 install(DIRECTORY src/
-        DESTINATION include/purge-duplicates           # Install headers into an include directory
+        DESTINATION include/${EXECUTABLE_NAME}           # Install headers into an include directory
         FILES_MATCHING PATTERN "*.hpp"                 # Only match header files
 )
 
@@ -101,7 +106,7 @@ install(DIRECTORY src/
 # Build Configuration Summary
 # ----------------------------------------------------------------------------
 message(STATUS "=====================================================")
-message(STATUS "Configuring purge-duplicates...")
+message(STATUS "Configuring ${EXECUTABLE_NAME}...")
 message(STATUS "  C++ Standard      : ${CMAKE_CXX_STANDARD}")
 message(STATUS "  OpenSSL Found     : ${OPENSSL_FOUND}")
 message(STATUS "  OpenSSL Version   : ${OPENSSL_VERSION}")
