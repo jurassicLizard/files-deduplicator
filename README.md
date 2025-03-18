@@ -1,6 +1,6 @@
-# Purge-Duplicates
+# Files-Deduplicator
 
-**Purge-Duplicates** is a powerful command-line tool that efficiently identifies and removes duplicate files from directories. Using cryptographic **Blake2** hashes, it ensures accurate and fast file comparison, making it an essential tool for data cleaning and file management.
+**Files-Deduplicator** is a powerful command-line tool that efficiently identifies and removes duplicate files from directories. Using cryptographic **Blake2** hashes, it ensures accurate and fast file comparison, making it an essential tool for data cleaning and file management. By default, the software runs in duplication detection mode and does not make any changes unless run with the `--live-run` flag.
 
 ---
 
@@ -14,7 +14,7 @@
 - **Cross-Platform**: Designed to work on **Linux**, **Windows**, and **macOS**.
 - **Efficient and Lightweight**: Capable of processing large datasets effectively.
 
-> **DISCLAIMER**: This software is provided **"as is"** under the MIT License. Use the software **at your own risk**. The authors are not liable for any damage, loss, or issues that may arise as a result of using this tool.
+> **DISCLAIMER**: This software is provided **"as is"** under the MIT License. Use the software **at your own risk**. The authors are not liable for any damage, loss, or issues that may arise as a result of using this tool. The software runs by default in duplication detection mode and does not make any changes unless run with the `--live-run` flag. Users must always ensure they have their own backups. The software is thoroughly tested to the best of the author's knowledge.
 
 ---
 
@@ -35,7 +35,7 @@
 
 ## Introduction
 
-Purge-Duplicates is designed to help users clean up their file systems by removing duplicate files. Whether you are managing a large dataset or simply tidying up your personal files, this tool provides a reliable and efficient solution.
+Files-Deduplicator is designed to help users clean up their file systems by removing duplicate files. Whether you are managing a large dataset or simply tidying up your personal files, this tool provides a reliable and efficient solution. The software also functions as a "duplicate detector."
 
 ## Getting Started
 
@@ -45,10 +45,10 @@ Download the latest release or build the software from source to get started. Re
 
 ## Usage
 
-To use **Purge-Duplicates**, you can execute the compiled binary with the required arguments directly from the command line:
+To use **Files-Deduplicator**, you can execute the compiled binary with the required arguments directly from the command line:
 
 ```bash
-purge_duplicates <directory_path> [--show-progress] [--live-run]
+rmdup <directory_path> [--show-progress] [--live-run]
 ```
 
 ### Command-Line Arguments
@@ -67,7 +67,7 @@ purge_duplicates <directory_path> [--show-progress] [--live-run]
 **Scenario**: Find duplicate files in `/home/user/documents` and only list them (dry-run mode by default).
 
 ```bash
-purge_duplicates /home/user/documents
+rmdup /home/user/documents
 ```
 
 Output:
@@ -86,7 +86,7 @@ To perform the actual deletion, re-run the command with the --live-run flag.
 **Scenario**: Remove duplicate files in `/home/user/documents` and show progress.
 
 ```bash
-purge_duplicates /home/user/documents --show-progress --live-run
+rmdup /home/user/documents --show-progress --live-run
 ```
 
 Output:
@@ -106,7 +106,7 @@ Duplicate removal complete. Processed 500 unique files.
 **Scenario**: Scan a folder containing a large dataset while displaying progress, but do not delete any files.
 
 ```bash
-purge_duplicates /large/dataset --show-progress
+rmdup /large/dataset --show-progress
 ```
 
 Output:
@@ -136,8 +136,8 @@ This project uses **CMake** for cross-platform builds. Ensure you have the prere
 
 2. Clone and build the project:
    ```bash
-   git clone https://github.com/jurassicLizard/purge-duplicates.git
-   cd purge-duplicates
+   git clone https://github.com/jurassicLizard/files-deduplicator.git
+   cd files-deduplicator
    mkdir build
    cd build
    cmake .. -DCMAKE_BUILD_TYPE=Release
@@ -173,8 +173,8 @@ The project is compatible with **Windows**, but preparation is required due to e
 
 3. Clone and build the project:
    ```powershell
-   git clone https://github.com/jurassicLizard/purge-duplicates.git
-   cd purge-duplicates
+   git clone https://github.com/jurassicLizard/files-deduplicator.git
+   cd files-deduplicator
    mkdir build
    cd build
    cmake .. -G "Visual Studio 17 2022" -DCMAKE_PREFIX_PATH="C:/path/to/openssl"
@@ -198,15 +198,15 @@ The project includes an **install target** to simplify deployment. The `cmake --
 
 2. Run the installed binary from anywhere:
    ```bash
-   purge_duplicates /path/to/folder --show-progress
+   rmdup /path/to/folder --show-progress
    ```
 
 #### Uninstalling the Software
 
 To uninstall, delete the installed files manually, e.g.:
 ```bash
-sudo rm -f /usr/local/bin/purge_duplicates
-sudo rm -rf /usr/local/include/purge-duplicates/
+sudo rm -f /usr/local/bin/rmdup
+sudo rm -rf /usr/local/include/files-deduplicator/
 ```
 
 ---
