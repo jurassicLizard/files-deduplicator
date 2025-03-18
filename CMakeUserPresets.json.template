@@ -9,16 +9,13 @@
     {
       "name": "non-linux-debug",
       "displayName": "Debug (with vcpkg)",
-      "inherits": [
-        "windows-debug",
-        "macos-debug"
-      ],
-      "cacheVariables": {
-        "vcpkgRoot": {
-          "type": "PATH",
-          "value": "$env{VCPKG_ROOT}"
-        }
-      },
+        "inherits": [
+            "windows-debug",
+            "macos-debug"
+        ],
+        "environment": {
+            "VCPKG_ROOT": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\vcpkg"
+        },
       "condition": {
         "type": "inList",
         "string": "${hostSystemName}",
@@ -29,26 +26,23 @@
       }
     },
     {
-      "name": "non-linux-release",
-      "displayName": "Release (with vcpkg)",
-      "inherits": [
-        "windows-release",
-        "macos-release"
-      ],
-      "cacheVariables": {
-        "vcpkgRoot": {
-          "type": "PATH",
-          "value": "$env{VCPKG_ROOT}"
+        "name": "non-linux-release",
+        "displayName": "Release (with vcpkg)",
+        "inherits": [
+            "windows-release",
+            "macos-release"
+        ],
+        "environment": {
+            "VCPKG_ROOT": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\vcpkg"
+        },
+        "condition": {
+            "type": "inList",
+            "string": "${hostSystemName}",
+            "list": [
+                "Windows",
+                "Darwin"
+            ]
         }
-      },
-      "condition": {
-        "type": "inList",
-        "string": "${hostSystemName}",
-        "list": [
-          "Windows",
-          "Darwin"
-        ]
-      }
     }
   ],
   "buildPresets": [

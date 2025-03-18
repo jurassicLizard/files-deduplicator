@@ -301,9 +301,6 @@ Tests can be easily executed using the predefined CMake test presets (We have no
 ```bash
 # Run tests using Linux debug preset
 ctest --preset linux-debug
-
-# Run tests using non-Linux debug preset (Windows/macOS)
-ctest --preset non-linux-debug
 ```
 
 You can also define your own test configurations in the `CMakeUserPresets.json` file for custom test environments.
